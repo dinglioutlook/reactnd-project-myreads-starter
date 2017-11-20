@@ -1,6 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './App'
+import BooksApp from './App'
 import './index.css'
+import { BrowserRouter } from 'react-router-dom'
 
-ReactDOM.render(<App />, document.getElementById('root'))
+import registerServiceWorker from './registerServiceWorker';
+
+ReactDOM.render(
+<BrowserRouter><BooksApp /></BrowserRouter>,
+ document.getElementById('root'));
+
+ registerServiceWorker();
