@@ -12,7 +12,7 @@ class BooksApp extends React.Component {
     searchQuery: ""
   }
   
-  componentWillMount = () => {
+  componentDidMount = () => {
     BooksAPI.getAll().then(books =>{
       this.setState({books: books})
     });
@@ -35,7 +35,7 @@ class BooksApp extends React.Component {
       <div className="app">
       <p> Book Apps</p>
       <Route path='/search' render={() => (
-          <SearchBook />
+          <SearchBook onChangeShelf={this.onChangeShelf} books = {this.state.books}/>
         )}/>
       
       <Route exact path = '/' render = {({history}) => (

@@ -9,19 +9,29 @@ class SearchBook extends React.Component {
         searchQuery: ""
       }
 
-      componentWillMount = () => {
+      componentDidMount = () => {
         BooksAPI.getAll().then(books =>{
           this.setState({books: books})
         });
       };    
-      
-      onChangeShelf = (event, book) => {
-      };
 
-      onSearchBook = query =>{
+      onSearchBook = (query, all_books) =>{
         this.setState({searchQuery: query});
+
         BooksAPI.search(query, 5).then(books =>{
-          this.setState({books: books});
+          // merge books with all the users books
+          var result = [];
+          (books instanceof Array) &&
+          (all_books instanceof Array) &&  
+          all_books.forEach(function(e1){
+            books.forEach(function(e2){
+                  if(e1.title === e2.title){
+                      result.push(e1);
+                  }
+              });
+          });
+
+          this.setState({books: result});
         })
       }
 
@@ -34,7 +44,7 @@ class SearchBook extends React.Component {
                         books.map((book, index) => {
                                 return (
                                     <li key={index}>
-                                        <Book book={book} onChangeShelf={this.onChangeShelf}/>
+                                        <Book book={book} onChangeShelf={this.props.onChangeShelf}/>
                                     </li>
                                 );
                     })}
@@ -52,7 +62,7 @@ class SearchBook extends React.Component {
                 </Link>
                 <div className="search-book-input">
                     <input type = "text" placeholder ="Serach books by title or author" 
-                        onChange ={(event) => this.onSearchBook(event.target.value)}    
+                        onChange ={(event) => this.onSearchBook(event.target.value, this.props.books)}    
                     />
                 </div>
             </div>
