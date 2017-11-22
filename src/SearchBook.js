@@ -6,7 +6,8 @@ import * as BooksAPI from './BooksAPI'
 class SearchBook extends React.Component {
     state = {
         books:[],
-        searchQuery: ""
+        searchQuery: "",
+        search_books:[]
       }
 
       componentDidMount = () => {
@@ -20,23 +21,25 @@ class SearchBook extends React.Component {
 
         BooksAPI.search(query, 5).then(books =>{
           // merge books with all the users books
-          var result = [];
-          (books instanceof Array) &&
-          (all_books instanceof Array) &&  
-          all_books.forEach(function(e1){
-            books.forEach(function(e2){
-                  if(e1.title === e2.title){
-                      result.push(e1);
-                  }
-              });
-          });
-
-          this.setState({books: result});
-        })
+            if(books && books instanceof Array && (books.length !== 0)) 
+            { 
+                let search_book = books.map((_book) => {
+                    let update_book = all_books.filter((exist_book) => {
+                        return _book.id === exist_book.id;
+                    });
+                    return update_book[0] ? update_book[0] : _book;
+                });
+                this.setState({ search_books: search_book })
+            }
+            else 
+            {
+                this.setState( { search_books: [] })
+            }
+            })
       }
 
       shelf = () => {
-        let books = this.state.books;
+        let books = this.state.search_books;
         return (
             <div className = "book-shelf-detail">
                 <ol className="books-grid">
