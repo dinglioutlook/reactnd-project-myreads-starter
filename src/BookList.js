@@ -10,12 +10,12 @@ class BookList extends React.Component{
 
         const shelf = shelf_types.map(
             (t, i) => {
-                let books = (this.props.books !== undefined && this.props.books instanceof Array) &&  (this.props.books.filter((b) => b.shelf === t))
+                let books = (this.props.books != undefined && this.props.books instanceof Array) &&  (this.props.books.filter((b) => b.shelf === t))
                 return (
                     <div key = {t} className = "book-shelf-detail">
                         <p> Book shelf Name : {shelf_name[i]}</p>
                         <ol className="books-grid">
-                            {books !== undefined && 
+                            {books != undefined && books.length !== 0 && 
                                 books.map((book, index) => {
                                         return (
                                             <li key={index}>

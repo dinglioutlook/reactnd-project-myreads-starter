@@ -9,7 +9,8 @@ import './App.css'
 class BooksApp extends React.Component {
   state = {
     books:[],
-    searchQuery: ""
+    searchQuery: "",
+    search_books: []
   }
   
   componentDidMount = () => {
@@ -30,12 +31,46 @@ class BooksApp extends React.Component {
     )
   };
 
+  onSearchBook = (query) =>{
+        this.setState({searchQuery: query});
+        let all_books = this.state.books;
+
+        if (query.length === 0){
+            this.setState({search_books:[]});
+            return;
+        }
+
+        BooksAPI.search(query, 5).then(books =>{
+          // merge books with all the users books
+            if(books && books instanceof Array && (books.length !== 0)) 
+            { 
+                let search_book = books.map((_book) => {
+                    let update_book = all_books.filter((exist_book) => {
+                        return _book.id === exist_book.id;
+                    });
+
+                    if(update_book[0] == undefined)
+                    {
+                        _book.shelf = 'none';
+                    }
+
+                    return update_book[0] ? update_book[0] : _book
+                });
+                this.setState({ search_books: search_book })
+            }
+            else 
+            {
+                this.setState( { search_books: [] })
+            }
+            })
+      }
+
   render() {
     return (
       <div className="app">
       <p> Book Apps</p>
       <Route path='/search' render={() => (
-          <SearchBook onChangeShelf={this.onChangeShelf} books = {this.state.books}/>
+          <SearchBook onChangeShelf={this.onChangeShelf} books = {this.state.search_books} onSearchBook={this.onSearchBook}/>
         )}/>
       
       <Route exact path = '/' render = {({history}) => (
