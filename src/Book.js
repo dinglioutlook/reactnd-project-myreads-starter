@@ -7,7 +7,7 @@ class Book extends React.Component{
         return(                         
         <div className="book">
             <div className="book-top">
-                        <div className="book-cover" style={{ width: 128, height: 192, backgroundImage: "url(" + this.props.book.imageLinks + ")"}}></div>
+                        <div className="book-cover" style={{ width: 128, height: 192, backgroundImage: "url(" + this.props.book.imageLinks.thumbnail + ")"}}></div>
                 <div className="book-shelf-changer">
                     <select value = {this.props.book.shelf} onChange = {(event) => { this.props.onChangeShelf(event, this.props.book)}}>
                         <option value="currentlyReading">Currently Reading</option>
